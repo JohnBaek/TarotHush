@@ -11,7 +11,7 @@ class TarotCardCore extends StatelessWidget {
   // 위젯
   final Widget? widget;
 
-  const TarotCardCore({required this.fillColor,required this.borderColor, required this.widget});
+  const TarotCardCore({super.key, required this.fillColor,required this.borderColor, required this.widget});
 
   @override
   Widget build(BuildContext context) {

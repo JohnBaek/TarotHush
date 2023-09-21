@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../components/subject-text-h1.dart';
 import '../components/tarot-card-flip.dart';
+import '../providers/widget-resize-controller.dart';
 
 /// 다이어리뷰 메인 페이지 
 class DiaryView extends StatelessWidget {
@@ -90,21 +93,45 @@ class DiaryView extends StatelessWidget {
     ,'Wands13.png'
     ,'Wands14.png'
   ];
+  
+
+  
   @override
   Widget build(BuildContext context) {
+    double stackSkew = 0.4;
+    double widgetWidth = MediaQuery.of(context).size.width - 16;
+    double cardWith = 100;
+    int cardsPerRow = (widgetWidth / cardWith / stackSkew - 1 / stackSkew).floor();
+    
+    List<TarotCardFlip> _cards = [];
+    for (int i = 0; i < 20; i++) {
+      _cards.add(TarotCardFlip(cardImagePath: 'assets/images/tarots/rider-waited-classic/${cards[Random().nextInt(cards.length)]}'));
+    }
+    
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15.0),
       child: Stack(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(15, 0, 0, 0) ,
-            child: TarotCardFlip(cardImagePath: 'assets/images/tarots/rider-waited-classic/${cards[Random().nextInt(cards.length)]}'),
-          ),
-          const SizedBox(height: 30),
-          CupertinoButton.filled(
-            onPressed: () {},
-            child: const Text('Enabled'),
-          ),
-        ],
+          children: [
+            ..._cards
+                .asMap()
+                .map(
+                  (index, card) {
+                return MapEntry(
+                  index,
+                  Positioned(
+                    child: TarotCardFlip(cardImagePath: 'assets/images/tarots/rider-waited-classic/${cards[Random().nextInt(cards.length)]}'),
+                    left: stackSkew *
+                        cardWith *
+                        (index - (cardsPerRow) * (index / cardsPerRow).floor()),
+                    top: (120.0 + 2) *
+                        (index / cardsPerRow).floor(),
+                  ),
+                );
+              },
+            )
+                .values
+                .toList()
+          ]
       ),
     );
   }

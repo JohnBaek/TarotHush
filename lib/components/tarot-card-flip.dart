@@ -10,7 +10,6 @@ class TarotCardFlip extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
       elevation: 0.0,
-      margin: EdgeInsets.only(left: 32.0, right: 32.0, top: 20.0, bottom: 0.0),
       color: Color(0x00000000),
       child: FlipCard(
         direction: FlipDirection.HORIZONTAL,
