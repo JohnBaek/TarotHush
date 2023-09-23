@@ -16,9 +16,8 @@ class TarotCardFlip extends StatelessWidget {
         side: CardSide.FRONT,
         speed: 1000,
         onFlip: (){
-          print(1);
         },
-        onFlipDone: (status) {
+        onFlipDone: (isFront) {
         },
         front: const Stack(
             alignment: Alignment.center,

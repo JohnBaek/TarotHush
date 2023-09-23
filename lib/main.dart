@@ -4,11 +4,14 @@ import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_acrylic/widgets/transparent_macos_sidebar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:my_app/providers/tarot-card-list-controller.dart';
 import 'package:my_app/providers/widget-resize-controller.dart';
-import 'package:my_app/views/diary_view.dart';
+import 'package:my_app/views/tarot-selector.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 
 /// 뷰페이지의 사이즈를 핸들하기 위한 글로벌키
@@ -20,6 +23,18 @@ void main() async {
   /// 윈도우 사이즈 이벤트 이니셜라이즈
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
+  WindowOptions windowOptions = const WindowOptions(
+    fullScreen: false,
+    skipTaskbar: true,
+    center: false,
+    alwaysOnTop: false, // This hide the taskbar and appear the app on top
+    titleBarStyle: TitleBarStyle.hidden,
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
   
   runApp(const GetMaterialApp(home: StartUp()));
   configLoading();
@@ -71,6 +86,10 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
   // 사이드 메뉴 컨트롤러 
   SideMenuController sideMenu = SideMenuController();
 
+  WindowEffect effect = WindowEffect.transparent;
+  Color color = Colors.transparent;
+  MacOSBlurViewState macOSBlurViewState = MacOSBlurViewState.followsWindowActiveState;
+
   // debounce 선언 및 초기화
   final updateWindowResizeDebounced = Debouncer(
     const Duration(milliseconds: 100),
@@ -78,11 +97,20 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
     checkEquality: false,
   );
 
+  void setWindowEffect(WindowEffect? value) {
+    Window.setEffect(
+      effect: value!,
+      color: this.color,
+    );
+    this.setState(() => this.effect = value);
+  }
+  
   /// initState
   @override
   void initState() {
     // 윈도우 변경 감지 주입
     windowManager.addListener(this);
+    this.setWindowEffect(this.effect);
     
     // 윈도우 변경감지 디바운서 리스닝
     updateWindowResizeDebounced.values.listen((event) {
@@ -110,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
   notifyWidgetSize(){
     // 사이즈를 구한다.
     Size viewPageSize = getWidgetSize(_pageViewKey);
-    double correctWidth = viewPageSize.width / 11;
+    double correctWidth = viewPageSize.width / 8;
     double correctHeight = correctWidth * 1.7;
 
     // 전달한다.
@@ -136,150 +164,75 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
   Widget build(BuildContext context) {
     // 위젯 리사이즈 상태관리 컨트롤러 등록
     Get.put(WidgetResizeController());
-    
     return CupertinoPageScaffold(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SideMenu(
-            controller: sideMenu,
-            style: SideMenuStyle(
-              displayMode: SideMenuDisplayMode.auto,
-              hoverColor: Colors.blue[100],
-              selectedHoverColor: Colors.blue[100],
-              selectedColor: Colors.lightBlue,
-              selectedTitleTextStyle: const TextStyle(color: Colors.white),
-              selectedIconColor: Colors.white,
-            ),
-            footer: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue[100],
-                    borderRadius: BorderRadius.circular(12)),
-                child: Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                  child: Text(
-                    'mohada',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[800]),
-                  ),
+      child:
+      Container(
+        margin: const EdgeInsets.only(top: 50),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SideMenu(
+              controller: sideMenu,
+              style: SideMenuStyle(
+                openSideMenuWidth: 200,
+                displayMode: SideMenuDisplayMode.auto,
+                hoverColor: Colors.blue[100],
+                selectedHoverColor: Colors.blue[100],
+                selectedColor: Colors.lightBlue,
+                selectedTitleTextStyle: const TextStyle(fontSize: 14, color: Colors.white),
+                unselectedTitleTextStyle: const TextStyle(fontSize: 14) ,
+                selectedIconColor: Colors.white,
+              ),
+              items: [
+                SideMenuItem(
+                  title: 'Playing',
+                  onTap: (index, _) {
+                    sideMenu.changePage(index);
+                  },
+                  icon: const Icon(Icons.credit_card_outlined),
+                  tooltipContent: "This is a tooltip for Dashboard item",
                 ),
-              ),
+                SideMenuItem(
+                  builder: (context, displayMode) {
+                    return const Divider(
+                      endIndent: 8,
+                      indent: 8,
+                    );
+                  },
+                ),
+                SideMenuItem(
+                  title: 'Settings',
+                  onTap: (index, _) {
+                    sideMenu.changePage(index);
+                  },
+                  icon: const Icon(Icons.settings),
+                ),
+              ],
             ),
-            items: [
-              SideMenuItem(
-                title: 'Today\'s Tarot',
-                onTap: (index, _) {
-                  sideMenu.changePage(index);
-                },
-                icon: const Icon(Icons.home),
-                tooltipContent: "This is a tooltip for Dashboard item",
-              ),
-              SideMenuItem(
-                builder: (context, displayMode) {
-                  return const Divider(
-                    endIndent: 8,
-                    indent: 8,
-                  );
-                },
-              ),
-              SideMenuItem(
-                title: 'Settings',
-                onTap: (index, _) {
-                  sideMenu.changePage(index);
-                },
-                icon: const Icon(Icons.settings),
-              ),
-              SideMenuItem(
-                title: 'Exit',
-                onTap: (index, _) {
-                  sideMenu.changePage(index);
-                },
-                icon: Icon(Icons.exit_to_app),
-              ),
-            ],
-          ),
-          Expanded(
-            child: 
-                GetBuilder<WidgetResizeController>(
-                  builder: (controller) {
-                    return
-                      PageView(
-                        key: _pageViewKey,
-                        controller: pageController,
-                        children: [
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                                child: DiaryView()
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Users',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Files',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Download',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Settings',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Only Title',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text(
-                                'Only Icon',
-                                style: TextStyle(fontSize: 35),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                  }
+            Expanded(
+                child: PageView(
+                  scrollDirection: Axis.vertical,
+                  key: _pageViewKey,
+                  controller: pageController,
+                  children: [
+                    TarotSelector()
+
+                    // ListView(
+                    //   children: [
+                    //     TarotSelector()
+                    //   ],
+                    // )
+                  ],
                 )
-            
-          ),
-        ],
-      ),
+            ),
+          ],
+        )
+      ) ,
     );
   }
 }
+
+
 
 /// 위젯의 사이즈를 구한다.
 getWidgetSize(GlobalKey key) {
