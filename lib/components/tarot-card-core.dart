@@ -42,7 +42,7 @@ Widget cardOutline(double width, double height, Color fillColor, Color borderCol
       width: width,
       height: height,
       decoration: BoxDecoration(
-        border: Border.all(color: borderColor, width: 2.0),
+        border: Border.all(color: borderColor, width: 3.0),
         color: Color(fillColor.value),
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
