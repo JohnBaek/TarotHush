@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:my_app/providers/side-button-controller.dart';
+
+import '../../controllers/controller-side-button.dart';
 
 /// 사이드 서브 메뉴 버튼 
-class SubMenuButton extends StatelessWidget {
+class ComponentSubMenuButton extends StatelessWidget {
   /// 버튼명 
   final String name;
   
   /// 아이콘 
   final IconData iconData;
-  const SubMenuButton({super.key, required this.name, required this.iconData});
+  
+  /// 클릭시 콜백 메서드 
+  final VoidCallback onTap;
+  const ComponentSubMenuButton({super.key, required this.name, required this.iconData, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +27,9 @@ class SubMenuButton extends StatelessWidget {
             onTap: () {
               // 선택한 버튼의 이름을 추가한다.
               controller.click(name);
+              onTap();
             },
             child: Container(
-                margin: const EdgeInsets.only(top: 10),
                 // 선택된 버튼이랑 일치하는 경우 선택 표시 
                 decoration: (controller.selectedButtonName != name) ? null :
                 BoxDecoration(
@@ -39,14 +43,14 @@ class SubMenuButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(width: 15),
-                    Icon(iconData,size: 20, color: Colors.blueAccent,),
+                    Icon(iconData,size: 15, color: Colors.blueAccent,),
                     Container(width: 6),
                     Text(name,
                       style: TextStyle(
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.black.withOpacity(0.9)),
+                          fontSize: 13,
+                          color: Colors.black.withOpacity(0.6)),
                     )
                   ],
                 )

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:my_app/providers/widget-resize-controller.dart';
+
+import '../../controllers/controller-widget-resize.dart';
 
 /// 타로카드 외형 및 선택 코어 클래스
-class TarotCardCore extends StatelessWidget {
+class ComponentTarotCardCore extends StatelessWidget {
   // 채울 색상
   final Color fillColor;
   // 외곽선의 컬러 
@@ -11,7 +12,7 @@ class TarotCardCore extends StatelessWidget {
   // 위젯
   final Widget? widget;
 
-  const TarotCardCore({super.key, required this.fillColor,required this.borderColor, required this.widget});
+  const ComponentTarotCardCore({super.key, required this.fillColor,required this.borderColor, required this.widget});
 
   @override
   Widget build(BuildContext context) {

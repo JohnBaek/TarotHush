@@ -7,14 +7,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import 'subject-text-h1.dart';
-import 'tarot-card-flip.dart';
+import '../../controllers/controller-tarot-card-list.dart';
+import '../../controllers/controller-widget-resize.dart';
+import '../component-subject-text-h1.dart';
+import 'component-tarot-card-flip.dart';
 
-import '../providers/tarot-card-list-controller.dart';
-import '../providers/widget-resize-controller.dart';
 
 /// 다이어리뷰 메인 페이지 
-class TarotSelector extends StatelessWidget {
+class ComponentTarotSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 타로카드 상태관리 컨트롤러 등록

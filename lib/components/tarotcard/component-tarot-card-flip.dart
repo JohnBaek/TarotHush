@@ -1,13 +1,14 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_app/components/tarot-card-core.dart';
+import 'package:my_app/components/tarotcard/component-tarot-card-core.dart';
 
-import '../providers/tarot-card-list-controller.dart';
+import '../../controllers/controller-tarot-card-list.dart';
 
-class TarotCardFlip extends StatelessWidget {
+
+class ComponentTarotCardFlip extends StatelessWidget {
   final String cardImagePath;
-  const TarotCardFlip({super.key, required this.cardImagePath});
+  const ComponentTarotCardFlip({super.key, required this.cardImagePath});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -29,7 +30,7 @@ class TarotCardFlip extends StatelessWidget {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        TarotCardCore(fillColor:Colors.white,borderColor:Colors.black,widget:Image(image: AssetImage(cardImagePath), fit: BoxFit.fill)),
+                        ComponentTarotCardCore(fillColor:Colors.white,borderColor:Colors.black,widget:Image(image: AssetImage(cardImagePath), fit: BoxFit.fill)),
                       ],
                     ),
                     Visibility(
@@ -38,8 +39,8 @@ class TarotCardFlip extends StatelessWidget {
                         const Stack(
                           alignment: Alignment.center,
                           children: [
-                            TarotCardCore(fillColor:Colors.white,borderColor:Colors.black,widget:null),
-                            TarotCardCore(fillColor:Colors.blue,borderColor:Colors.black,widget:null),
+                            ComponentTarotCardCore(fillColor:Colors.white,borderColor:Colors.black,widget:null),
+                            ComponentTarotCardCore(fillColor:Colors.blue,borderColor:Colors.black,widget:null),
                           ],
                         )
                     )

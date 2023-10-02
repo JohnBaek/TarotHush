@@ -7,20 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/widgets/transparent_macos_sidebar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:my_app/components/card-view.dart';
-import 'package:my_app/providers/side-button-controller.dart';
-import 'package:my_app/providers/tarot-card-list-controller.dart';
-import 'package:my_app/providers/widget-resize-controller.dart';
-import 'package:my_app/components/tarot-selector.dart';
+import 'package:my_app/components/component-card-view.dart';
+import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
+import 'package:my_app/views/view-diary.dart';
+import 'package:my_app/views/view-none.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 
-import 'components/sub-menu-button.dart';
-import 'components/sub-menu-title.dart';
+import 'components/submenus/component-sub-menu-button.dart';
+import 'components/submenus/component-sub-menu-title.dart';
+import 'controllers/controller-side-button.dart';
+import 'controllers/controller-tarot-card-list.dart';
+import 'controllers/controller-widget-resize.dart';
 
 
 /// 뷰페이지의 사이즈를 핸들하기 위한 글로벌키
 GlobalKey _pageViewKey = GlobalKey();
+
+// Navigator를 식별해주는 key
+final _navigatorKey = GlobalKey<NavigatorState>();
 
 /// 메인 클래스
 void main() async {
@@ -83,6 +88,8 @@ class MyHomePage extends StatefulWidget {
 
 // 윈도우 리스너 MixIn
 class _MyHomePageState extends State<MyHomePage> with WindowListener{
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  
   // 페이지 컨트롤러
   PageController pageController = PageController();
   
@@ -179,12 +186,15 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
   Widget build(BuildContext context) {
     // 위젯 리사이즈 상태관리 컨트롤러 등록
     Get.put(WidgetResizeController());
+    // 타로 카드 리스트 관리 컨트롤러 등록
     Get.put(TarotCardListController());
+    // 사이드 버튼 관리 컨트롤러 등록
     Get.put(SideMenuButtonController());
     return Scaffold(
       body:
         Row(
           children: [
+            /// 사이드 메뉴 
             Container(
               height: double.infinity,
               width: 200,
@@ -195,17 +205,32 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
                   right: BorderSide(width: 1 , color: Colors.black54.withOpacity(0.1))
                 )
               ),
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(15, 50 , 15, 0) ,
+              child:
+                Container(
+                margin: const EdgeInsets.fromLTRB(10, 20 , 10, 0) ,
                 child: 
-                  const Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SubMenuTitle(name: 'Playing',),
-                      SubMenuButton(name: 'Diary', iconData: Icons.access_time_outlined,),
-                      SubMenuButton(name: 'Spreads', iconData: Icons.account_tree_sharp,),
+                      const ComponentSubMenuTitle(name: 'Playing',),
+                      // 다이어리 뷰 버튼
+                      ComponentSubMenuButton(name: 'Diary', iconData: Icons.access_time_outlined, onTap: (){
+                        _onGenerateRoute(const RouteSettings(name: '/diary'));
+                      }),
+                      // 스프레드 세팅 버튼
+                      ComponentSubMenuButton(name: 'Spreads', iconData: Icons.account_tree_sharp, onTap: () {
+                        _onGenerateRoute(const RouteSettings(name: '/spread'));
+                      }),
                     ],
                 )
+              )
+            ) ,
+            /// 컨텐츠 뷰
+            Expanded(child:
+              Navigator(
+                key: _navigatorKey,
+                initialRoute: '/none',
+                onGenerateRoute: _onGenerateRoute,
               )
             )
           ],
@@ -231,4 +256,22 @@ getWidgetSize(GlobalKey key) {
     Size size = renderBox.size;
     return size;
   }
+}
+
+
+MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
+  // 유효한 값이 아닌경우 
+  if(setting.name == null) {
+    return MaterialPageRoute(builder: (context) => const ViewNone());
+  }
+  
+  // 라우트경로를 가져온다.
+  String routePath = setting.name!.toLowerCase();
+  switch(routePath) {
+    case '/diary': 
+      return MaterialPageRoute(builder: (context) => ViewDiary()); 
+      break;
+  }
+  
+  return MaterialPageRoute(builder: (context) => const ViewNone());
 }

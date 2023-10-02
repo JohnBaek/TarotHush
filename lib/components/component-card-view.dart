@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CardView extends StatelessWidget {
+class ComponentCardView extends StatelessWidget {
   final Widget child;
-  const CardView({super.key, required this.child});
+  const ComponentCardView({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
