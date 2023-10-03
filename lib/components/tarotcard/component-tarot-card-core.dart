@@ -9,12 +9,16 @@ class ComponentTarotCardCore extends StatelessWidget {
   final Color borderColor;
   // 위젯
   final Widget? widget;
+  // 가로
+  final double width;
+  // 새로
+  final double height;
 
-  const ComponentTarotCardCore({super.key, required this.fillColor,required this.borderColor, required this.widget});
+  const ComponentTarotCardCore({super.key, required this.fillColor,required this.borderColor, required this.widget, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
-    return cardOutline(70,120, fillColor, borderColor, widget);
+    return cardOutline(width,height, fillColor, borderColor, widget);
   }
 }
 

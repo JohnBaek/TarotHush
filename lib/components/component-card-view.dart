@@ -9,21 +9,22 @@ class ComponentCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return 
       Container(
-      margin: const EdgeInsets.fromLTRB(20,10,20,10) ,
-      width: double.infinity,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 0.5,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ]
-      ),
+        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.fromLTRB(20,10,20,10) ,
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 0.5,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ]
+        ),
       child: child,
     );
   }

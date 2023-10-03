@@ -29,26 +29,27 @@ class ComponentButton extends StatelessWidget {
         child: 
           MouseRegion(
             cursor: SystemMouseCursors.click,
-            child: Container(
-              margin: const EdgeInsets.all(10) ,
-              width: 150,
-              height: 60,
-              alignment: Alignment.center,
-              decoration:
-              BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Text(
-                name,
-                style:
-                const TextStyle(
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                    color: Colors.white),
-              ),
-            ),
+            child: 
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                width: 120,
+                height: 40,
+                alignment: Alignment.center,
+                decoration:
+                BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Text(
+                  name,
+                  style:
+                  const TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                      color: Colors.white),
+                ),
+              )
           )
     );
   }

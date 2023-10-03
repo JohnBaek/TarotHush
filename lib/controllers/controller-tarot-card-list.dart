@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_app/components/tarotcard/component-tarot-card-flip.dart';
@@ -44,6 +45,7 @@ class TarotCardSelectorController extends GetxController {
     }
     update();
   }
+
   
   /// 선택한 카드를 초기화한다.
   void clearSelectedCards(){
@@ -71,7 +73,7 @@ class TarotCardSelectorController extends GetxController {
   }
   
   /// 다이얼로그의 컨텍스트를 세팅한다.
-  void setContext(BuildContext context){
+  void setContext(BuildContext? context){
     tarotSelectorContext = context;
     update();
   }
