@@ -1,17 +1,9 @@
-import 'dart:math';
-
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../controllers/controller-tarot-card-list.dart';
 import '../../controllers/controller-widget-resize.dart';
-import '../component-subject-text-h1.dart';
-import 'component-tarot-card-flip.dart';
-
 
 /// 다이어리뷰 메인 페이지 
 class ComponentTarotSelector extends StatelessWidget {

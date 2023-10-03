@@ -4,6 +4,7 @@ import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_acrylic/macos/converters/blur_view_state_to_visual_effect_view_state_converter.dart';
 import 'package:flutter_acrylic/widgets/transparent_macos_sidebar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ import 'package:my_app/components/component-card-view.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
 import 'package:my_app/views/view-diary.dart';
 import 'package:my_app/views/view-none.dart';
+import 'package:my_app/views/view-spreads.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 
@@ -215,23 +217,39 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
                       const ComponentSubMenuTitle(name: 'Playing',),
                       // 다이어리 뷰 버튼
                       ComponentSubMenuButton(name: 'Diary', iconData: Icons.access_time_outlined, onTap: (){
-                        _onGenerateRoute(const RouteSettings(name: '/diary'));
+                        toView(const ViewDiary());
                       }),
                       // 스프레드 세팅 버튼
                       ComponentSubMenuButton(name: 'Spreads', iconData: Icons.account_tree_sharp, onTap: () {
-                        _onGenerateRoute(const RouteSettings(name: '/spread'));
+                        toView(const ViewSpreads());
                       }),
                     ],
                 )
               )
             ) ,
-            /// 컨텐츠 뷰
-            Expanded(child:
-              Navigator(
-                key: _navigatorKey,
-                initialRoute: '/none',
-                onGenerateRoute: _onGenerateRoute,
-              )
+
+
+            Expanded(
+                child:
+                  Stack(
+                    children: [
+                      Navigator(
+                        key: _navigatorKey,
+                        initialRoute: '/none',
+                        onGenerateRoute: _onGenerateRoute,
+                      ),
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: 50,
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.grey.withOpacity(0.2),
+                      //       border: Border(
+                      //           bottom: BorderSide(width: 1 , color: Colors.black54.withOpacity(0.1))
+                      //       )
+                      //   ),
+                      // )
+                    ],
+                  )
             )
           ],
         )
@@ -246,6 +264,11 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
           // )
     );
   }
+
+  /// 페이지를 라우팅 한다.
+  void toView(Widget widget) {
+    _navigatorKey.currentState?.push(_createRoute(widget));
+  }
 }
 
 /// 위젯의 사이즈를 구한다.
@@ -258,7 +281,7 @@ getWidgetSize(GlobalKey key) {
   }
 }
 
-
+/// Nested 라우팅을 진행한다.
 MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
   // 유효한 값이 아닌경우 
   if(setting.name == null) {
@@ -269,9 +292,19 @@ MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
   String routePath = setting.name!.toLowerCase();
   switch(routePath) {
     case '/diary': 
-      return MaterialPageRoute(builder: (context) => ViewDiary()); 
-      break;
+      return MaterialPageRoute(builder: (context) => const ViewDiary());
+    case '/spreads':
+      return MaterialPageRoute(builder: (context) => const ViewSpreads());
   }
   
   return MaterialPageRoute(builder: (context) => const ViewNone());
+}
+
+Route _createRoute(Widget widget) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => widget,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return child;
+    },
+  );
 }

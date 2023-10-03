@@ -7,7 +7,8 @@ class ComponentCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return 
+      Container(
       margin: const EdgeInsets.fromLTRB(20,10,20,10) ,
       width: double.infinity,
       alignment: Alignment.center,
