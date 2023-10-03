@@ -10,7 +10,7 @@ class ComponentButton extends StatelessWidget {
   final Color color;
 
   /// 클릭시 콜백 메서드 
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   /// 생성자
   const ComponentButton({super.key,required this.name, required this.onTap, required this.color});
@@ -24,7 +24,7 @@ class ComponentButton extends StatelessWidget {
         // 클릭시 
         onTap: () {
           // 콜백을 전달한다.
-          // onTap();
+          onTap();
         },
         child: 
           MouseRegion(

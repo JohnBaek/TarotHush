@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-
-import '../../controllers/controller-widget-resize.dart';
+import 'package:flutter/material.dart';
 
 /// 타로카드 외형 및 선택 코어 클래스
 class ComponentTarotCardCore extends StatelessWidget {
@@ -16,13 +14,9 @@ class ComponentTarotCardCore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-      GetBuilder<WidgetResizeController>(builder: (controller){
-        return cardOutline(controller.width,controller.height, fillColor, borderColor, widget);
-      });
+    return cardOutline(70,120, fillColor, borderColor, widget);
   }
 }
-
 
 /// 카드의 아웃라인을 리턴한다.
 Widget cardOutline(double width, double height, Color fillColor, Color borderColor, Widget? childWidget) {

@@ -1,20 +1,14 @@
-import 'dart:async';
-
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_acrylic/macos/converters/blur_view_state_to_visual_effect_view_state_converter.dart';
-import 'package:flutter_acrylic/widgets/transparent_macos_sidebar.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:my_app/components/component-card-view.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
 import 'package:my_app/views/view-diary.dart';
 import 'package:my_app/views/view-none.dart';
 import 'package:my_app/views/view-spreads.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 import 'components/submenus/component-sub-menu-button.dart';
 import 'components/submenus/component-sub-menu-title.dart';
@@ -22,12 +16,8 @@ import 'controllers/controller-side-button.dart';
 import 'controllers/controller-tarot-card-list.dart';
 import 'controllers/controller-widget-resize.dart';
 
-
-/// 뷰페이지의 사이즈를 핸들하기 위한 글로벌키
-GlobalKey _pageViewKey = GlobalKey();
-
-// Navigator를 식별해주는 key
-final _navigatorKey = GlobalKey<NavigatorState>();
+/// 타로 셀렉터 다이얼로그
+late BuildContext tarotSelectorContext;
 
 /// 메인 클래스
 void main() async {
@@ -72,11 +62,10 @@ class StartUp extends StatelessWidget {
   /// 빌더
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-        title: 'Tarot Diary', 
-        theme: const CupertinoThemeData(brightness: Brightness.light),
-        home: const MyHomePage(title: ''),
-        builder: EasyLoading.init()
+    return MaterialApp(
+      title: 'Tarot Diary', 
+      home: const MyHomePage(title: ''),
+      builder: EasyLoading.init()
     );
   }
 }
@@ -128,8 +117,8 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
     
     // 윈도우 변경감지 디바운서 리스닝
     updateWindowResizeDebounced.values.listen((event) {
-      // 뷰페이지의 현재 사이즈를 구한다.
-      // notifyWidgetSize();
+      // 카드 사이즈를 업데이트한다.
+      setCardSize();
     });
     
     // 사이드 메뉴 변경시 콜백 
@@ -145,28 +134,38 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
 
     /// 화면 빌드 완료후 콜백
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // notifyWidgetSize();
-      Get.find<TarotCardListController>().shuffleCard();
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
-      //     builder: (BuildContext context) {
-      //       return TarotSelector();
-      //     }
-      // );
+      setCardSize();
+      
     });
   }
   
+  /// 윈도우 사이즈 기반으로 카드 사이즈를 세팅한다.
+  setCardSize(){
+    // 카드 사이즈를 위한 화면 크기를 계산한다.
+    double widthWidget = MediaQuery.of(context).size.width;
 
-  notifyWidgetSize(){
-    // 사이즈를 구한다.
-    Size viewPageSize = getWidgetSize(_pageViewKey);
-    double correctWidth = 60;
-    double correctHeight = 60 * 1.7;
+    double cardWith = 0.0;
 
-    // 전달한다.
-    Get.find<WidgetResizeController>().notifyWidgetSize(correctWidth,correctHeight);
+    if(widthWidget < 900.0) {
+      cardWith = 100;
+    }
+    else {
+      cardWith = 150;
+    }
+
+    // 카드의 사이즈를 세팅한다.
+    Get.find<WidgetResizeController>().setCardWidgetSize(cardWith,cardWith*1.7);
   }
+  //
+  // notifyWidgetSize(){
+  //   // 사이즈를 구한다.
+  //   Size viewPageSize = getWidgetSize(_pageViewKey);
+  //   double correctWidth = 60;
+  //   double correctHeight = 60 * 1.7;
+  //
+  //   // 전달한다.
+  //   Get.find<WidgetResizeController>().setWindowWidgetSize(correctWidth,correctHeight);
+  // }
 
   /// 종료시 
   @override
@@ -189,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
     // 위젯 리사이즈 상태관리 컨트롤러 등록
     Get.put(WidgetResizeController());
     // 타로 카드 리스트 관리 컨트롤러 등록
-    Get.put(TarotCardListController());
+    Get.put(TarotCardSelectorController());
     // 사이드 버튼 관리 컨트롤러 등록
     Get.put(SideMenuButtonController());
     return Scaffold(
@@ -227,8 +226,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
                 )
               )
             ) ,
-
-
             Expanded(
                 child:
                   Stack(
@@ -268,6 +265,18 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener{
   /// 페이지를 라우팅 한다.
   void toView(Widget widget) {
     _navigatorKey.currentState?.push(_createRoute(widget));
+  }
+  
+  /// 타로 셀렉터를 오픈한다.
+  Future<void> showTarotSelector(BuildContext context) async {
+    tarotSelectorContext = context;
+    showDialog(
+        context: tarotSelectorContext,
+        barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+        builder: (tarotSelectorContext) {
+          return const ComponentTarotSelector();
+        }
+    );
   }
 }
 
