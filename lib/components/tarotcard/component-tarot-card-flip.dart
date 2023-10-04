@@ -99,8 +99,14 @@ class ComponentTarotCardFlip extends StatelessWidget {
     // 타로 카드 뷰 다이어리 컨트롤러를 가져온다.
     ViewDiaryController viewDiaryController = Get.find<ViewDiaryController>();
     
+    // Call of reference 방지
+    List<String> cardList = [];
+    for(String card in selectorController.selectedCards) {
+      cardList.add(card);
+    }
+    
     // 선택된 카드를 세팅한다.
-    viewDiaryController.addItem(addNewDiaryItem(selectorController.selectedCards));
+    viewDiaryController.addItem(addNewDiaryItem(cardList));
   }
 
   /// 다이어리에 아이템을 하나 추가한다.
@@ -118,7 +124,8 @@ class ComponentTarotCardFlip extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () async {
-                    await showTarotScreen(navigatorKey.currentContext!, selectedCards[i]);
+                    print(selectedCards[i]);
+                    showTarotScreen(navigatorKey.currentContext!,selectedCards[i]);
                   },
                   child:
                   MouseRegion(
@@ -139,20 +146,26 @@ class ComponentTarotCardFlip extends StatelessWidget {
   }
 
   /// 확대된 타로카드를 출력한다.
-  showTarotScreen(BuildContext buildContext, String selectedCard) async {
+  showTarotScreen(BuildContext buildContext, String selectedCard)  {
     showDialog(
         context: buildContext,
         barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
         builder: (buildContext) {
           return
-            Dialog(
-              backgroundColor: Colors.transparent,
-              child: ComponentTarotCardFront(
-                width: 300,
-                height: 500,
-                cardImagePath: selectedCard,
-              )
+            GetBuilder<TarotCardSelectorController>(
+                builder: (TarotCardSelectorController controller) {
+                  return
+                    Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: ComponentTarotCardFront(
+                          width: 300,
+                          height: 500,
+                          cardImagePath: selectedCard,
+                        )
+                    );
+                }
             );
+            
         }
     );
   }

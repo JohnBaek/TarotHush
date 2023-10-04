@@ -21,6 +21,9 @@ class TarotCardSelectorController extends GetxController {
   // 선택한 카드 
   List<String> selectedCards = [];
   
+  // 현재 선택한 타로카드
+  String selectedCard = '';
+  
   @override
   void onInit() {
     super.onInit();
@@ -29,6 +32,12 @@ class TarotCardSelectorController extends GetxController {
       tarotCards.add(ComponentTarotCardFlip(cardImagePath: 'assets/images/tarots/rider-waited-classic/${card.imageName}'));
     }
   } 
+  
+  /// 현재 선택한 셀렉트 카드를 업데이트한다.
+  void setSelectedCard(String card) {
+    selectedCard = card;
+    update();
+  }
   
   /// 카드를 셔플한다.
   void shuffleCard(){
