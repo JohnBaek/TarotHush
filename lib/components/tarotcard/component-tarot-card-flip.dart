@@ -31,13 +31,17 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
                   // 카드 숫자가 선택 완료 된경우 
                   if(selectorController.isCompleted()) {
-                    // 셀렉터 창을 닫는다.
-                    dismissTarotSelectorDialog(selectorController);
+                    return;
                   }
-                  // 숫자가 완료되지 않은경우
-                  else {
-                    // 클릭한 타로카드를 추가한다.
-                    controller.addSelectedCard(cardImagePath);
+
+                  // 클릭한 타로카드를 추가한다.
+                  controller.addSelectedCard(cardImagePath);
+
+                  // 선택이 완료된경우 2초후 자동 닫힘
+                  if(selectorController.isCompleted()) {
+                    Future.delayed(const Duration(seconds: 1),(){
+                      dismissTarotSelectorDialog(selectorController);
+                    });
                   }
                 } ,
                 child: Stack(
