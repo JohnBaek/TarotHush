@@ -9,6 +9,7 @@ import 'package:my_app/views/view-diary-controller.dart';
 
 import '../../controllers/controller-tarot-card-list.dart';
 import 'component-tarot-card-front.dart';
+import '../../navigation-key.dart';
 
 /// 타로 카드 완전체 객체
 class ComponentTarotCardFlip extends StatelessWidget {
@@ -93,21 +94,62 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
     // 타로 카드 뷰 다이어리 컨트롤러를 가져온다.
     ViewDiaryController viewDiaryController = Get.find<ViewDiaryController>();
-    viewDiaryController.addItem(addNewDiaryItem(viewDiaryController,selectorController.selectedCards));
+    
+    // 선택된 카드를 세팅한다.
+    viewDiaryController.addItem(addNewDiaryItem(selectorController.selectedCards));
   }
 
   /// 다이어리에 아이템을 하나 추가한다.
-  ComponentCardView addNewDiaryItem(ViewDiaryController viewDiaryController, List<String> selectedCards) {
+  ComponentCardView addNewDiaryItem(List<String> selectedCards) {
     return ComponentCardView(
-      child: 
-        Row(
+      dateTime: DateTime.now(),
+      child:
+      Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 모든 카드에 대해 처리한다.
-          for(String selectedItem in selectedCards)
-            ComponentTarotCardFront(cardImagePath: selectedItem,width: 100,height: 180)
+          for(int i=0; i < selectedCards.length; i++)
+            Column(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () async {
+                    await showTarotScreen(navigatorKey.currentContext!, selectedCards[i]);
+                  },
+                  child:
+                  MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child:Container(
+                          margin: const EdgeInsets.fromLTRB(20,20,20,10),
+                          child: ComponentTarotCardFront(cardImagePath: selectedCards[i],width: 100,height: 180)
+                      )
+                  ),
+                ),
+                // 선택된 카드의 번호
+                Text((i + 1).toString())
+              ],
+            )
         ],
-      ), 
+      ),
+    );
+  }
+
+  /// 확대된 타로카드를 출력한다.
+  showTarotScreen(BuildContext buildContext, String selectedCard) async {
+    showDialog(
+        context: buildContext,
+        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+        builder: (buildContext) {
+          return
+            Dialog(
+              backgroundColor: Colors.transparent,
+              child: ComponentTarotCardFront(
+                width: 300,
+                height: 500,
+                cardImagePath: selectedCard,
+              )
+            );
+        }
     );
   }
 }

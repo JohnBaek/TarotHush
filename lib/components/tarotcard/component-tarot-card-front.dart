@@ -14,12 +14,7 @@ class ComponentTarotCardFront extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return        
-      Stack(
-      alignment: Alignment.center,
-      children: [
-        ComponentTarotCardCore(fillColor:Colors.white,borderColor:Colors.black,width: width,height: height,widget:Image(image: AssetImage(cardImagePath), fit: BoxFit.fill)),
-      ],
-    );
+    return
+      ComponentTarotCardCore(fillColor:Colors.white,borderColor:Colors.black,width: width,height: height,widget:Image(image: AssetImage(cardImagePath), fit: BoxFit.fill));
   }
 }

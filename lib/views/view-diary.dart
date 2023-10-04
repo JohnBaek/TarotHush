@@ -30,7 +30,8 @@ class ViewDiary extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: controller.cardViewItems.length,
                     itemBuilder: (context,index){
-                      return controller.cardViewItems[index];
+                      return 
+                        controller.cardViewItems[index];
                     },
                   ),
                 ),

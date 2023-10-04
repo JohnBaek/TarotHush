@@ -1,31 +1,47 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ComponentCardView extends StatelessWidget {
+  /// 컨텐츠 위젯
   final Widget child;
-  const ComponentCardView({super.key, required this.child});
+  
+  /// 날짜 정보 
+  final DateTime? dateTime; 
+  const ComponentCardView({super.key, required this.child, required this.dateTime});
 
   @override
   Widget build(BuildContext context) {
-    return 
-      Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.fromLTRB(20,10,20,10) ,
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 0.5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ]
-        ),
-      child: child,
+    return
+    /// 컨텐츠 영역
+     Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      width: double.infinity,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 0.5,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ]),
+      child: Column(
+        children: [
+          // 시간표시를 해야하는 경우 
+          if(dateTime != null)
+            Container(
+              alignment: Alignment.topRight,
+              child: Text(DateFormat('HH:mm:ss').format(dateTime!)),
+            ),
+          // 컨텐츠 위젯
+          child
+        ],
+      )
     );
   }
 }
