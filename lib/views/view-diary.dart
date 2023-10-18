@@ -42,11 +42,15 @@ class ViewDiary extends StatelessWidget {
                     children: [
                       // 3카드 스프레드 버튼
                       ComponentButton(name: '3Card Spread',
+                          width: 120,
+                          height: 40,
                           onTap:(){
                             selectSpread(context,EnumSpreadType.threeCardSpread);
                           } , color: Colors.blueAccent),
                       // 1카드 스프레드 버튼
                       ComponentButton(name: '1Card Spread',
+                          width: 120,
+                          height: 40,
                           onTap:(){
                             selectSpread(context,EnumSpreadType.oneCardSpread);
                           } , color: Colors.blueAccent)

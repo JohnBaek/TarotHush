@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
+import 'package:my_app/models/hive/stored-selected-tarot.dart';
 import 'package:my_app/views/view-diary.dart';
 import 'package:my_app/views/view-none.dart';
 import 'package:my_app/views/view-spreads.dart';
+import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'components/submenus/component-sub-menu-button.dart';
@@ -20,9 +25,12 @@ import 'navigation-key.dart';
 /// 타로 셀렉터 다이얼로그
 late BuildContext tarotSelectorContext;
 
+/// 하이브 데이터베이스
+late Box<StoredSelectedTarot> hiveDatabase;
+
 /// 메인 클래스
 void main() async {
-  /// 윈도우 사이즈 이벤트 이니셜라이즈
+  // 윈도우 사이즈 이벤트 이니셜라이즈
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = const WindowOptions(
@@ -36,7 +44,24 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
   });
+  
+  // Hive 로컬 데이터베이스 이니셜라이즈
+  Hive.init(Directory.current.path);
+  Hive.registerAdapter(StoredSelectedTarotAdapter());
 
+  // 하이브 데이터베이스 이니셜라이즈
+  hiveDatabase = await Hive.openBox("tarotHush");
+  hiveDatabase.add(
+      StoredSelectedTarot(
+          id:const Uuid().v4(),
+          imagePath: 'dd',
+          sequence:0,
+          regDate: DateTime.now())
+  );
+
+  print(hiveDatabase.values.toList());
+  
+  
   runApp(GetMaterialApp(navigatorKey: navigatorKey, home: const StartUp()));
   configLoading();
 }
@@ -288,7 +313,7 @@ getWidgetSize(GlobalKey key) {
 MaterialPageRoute _onGenerateRoute(RouteSettings setting) {
   // 유효한 값이 아닌경우
   if (setting.name == null) {
-    return MaterialPageRoute(builder: (context) => const ViewNone());
+    return MaterialPageRoute(builder: (context) => const ViewNone()); 
   }
 
   // 라우트경로를 가져온다.

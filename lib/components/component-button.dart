@@ -8,12 +8,18 @@ class ComponentButton extends StatelessWidget {
   
   /// 버튼 컬러
   final Color color;
+  
+  /// 가로
+  final double width;
+  
+  /// 새로
+  final double height;
 
   /// 클릭시 콜백 메서드 
   final VoidCallback onTap;
 
   /// 생성자
-  const ComponentButton({super.key,required this.name, required this.onTap, required this.color});
+  const ComponentButton({super.key,required this.name, required this.onTap, required this.color, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +38,8 @@ class ComponentButton extends StatelessWidget {
             child: 
               Container(
                 margin: const EdgeInsets.only(right: 10),
-                width: 120,
-                height: 40,
+                width: width,
+                height: height,
                 alignment: Alignment.center,
                 decoration:
                 BoxDecoration(

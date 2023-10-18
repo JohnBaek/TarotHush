@@ -39,9 +39,8 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
                   // 선택이 완료된경우 2초후 자동 닫힘
                   if(selectorController.isCompleted()) {
-                    Future.delayed(const Duration(seconds: 1),(){
-                      dismissTarotSelectorDialog(selectorController);
-                    });
+                    dismissTarotSelectorDialog(selectorController);
+                    EasyLoading.showToast("Card Selected");
                   }
                 } ,
                 child: Stack(
@@ -111,6 +110,9 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
   /// 다이어리에 아이템을 하나 추가한다.
   ComponentCardView addNewDiaryItem(List<String> selectedCards) {
+    
+    
+    
     return ComponentCardView(
       dateTime: DateTime.now(),
       child:
