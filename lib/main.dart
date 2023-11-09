@@ -8,7 +8,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
-import 'package:my_app/models/hive/stored-selected-tarot.dart';
+import 'package:my_app/models/hive/hive-diary-detail.dart';
+import 'package:my_app/models/hive/hive-diary.dart';
 import 'package:my_app/views/view-diary.dart';
 import 'package:my_app/views/view-none.dart';
 import 'package:my_app/views/view-spreads.dart';
@@ -26,7 +27,7 @@ import 'navigation-key.dart';
 late BuildContext tarotSelectorContext;
 
 /// 하이브 데이터베이스
-late Box<StoredSelectedTarot> hiveDatabase;
+late Box<HiveDiaryDetail> hiveDatabase;
 
 /// 메인 클래스
 void main() async {
@@ -46,22 +47,11 @@ void main() async {
   });
   
   // Hive 로컬 데이터베이스 이니셜라이즈
-  Hive.init(Directory.current.path);
-  Hive.registerAdapter(StoredSelectedTarotAdapter());
+  // /Users/john/Library/Containers/com.example.myApp/Data
+  // Hive.init(Directory.current.path);
+  // Hive.registerAdapter(HiveDiaryAdapter());
+  // Hive.registerAdapter(HiveDiaryDetailAdapter());
 
-  // 하이브 데이터베이스 이니셜라이즈
-  hiveDatabase = await Hive.openBox("tarotHush");
-  hiveDatabase.add(
-      StoredSelectedTarot(
-          id:const Uuid().v4(),
-          imagePath: 'dd',
-          sequence:0,
-          regDate: DateTime.now())
-  );
-
-  print(hiveDatabase.values.toList());
-  
-  
   runApp(GetMaterialApp(navigatorKey: navigatorKey, home: const StartUp()));
   configLoading();
 }

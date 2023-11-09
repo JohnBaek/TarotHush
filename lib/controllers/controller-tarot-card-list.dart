@@ -52,6 +52,7 @@ class TarotCardSelectorController extends GetxController {
     if(!selectedCards.any((item) => item == cardImagePath)) {
       selectedCards.add(cardImagePath);
     }
+    
     update();
   }
 

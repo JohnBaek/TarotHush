@@ -12,7 +12,6 @@ class ComponentTarotSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<TarotCardSelectorController>(builder: (controller) {
       double widthWidget = MediaQuery.of(context).size.width;
-
       double cardWith = 100;
       double stackSkew = 0.5;
       double top = 0.0;

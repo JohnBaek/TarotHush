@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import 'component-button.dart';
 
+/// 화면에 표시될 말풍선 카드 뷰 위젯
 class ComponentCardView extends StatelessWidget {
   /// 컨텐츠 위젯
   final Widget child;

@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:my_app/components/component-card-view.dart';
 import 'package:my_app/components/tarotcard/component-tarot-card-core.dart';
 import 'package:my_app/views/view-diary-controller.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../controllers/controller-tarot-card-list.dart';
+import '../../models/hive/hive-diary-detail.dart';
 import 'component-tarot-card-front.dart';
 import '../../navigation-key.dart';
 
@@ -33,7 +35,14 @@ class ComponentTarotCardFlip extends StatelessWidget {
                   if(selectorController.isCompleted()) {
                     return;
                   }
-
+                  //
+                  // // 저장할 타로 카드 Hive 객체를 생성한다.
+                  // StoredSelectedTarot addNewCard = 
+                  //         StoredSelectedTarot(id: const Uuid().v4()
+                  //             , imagePath: cardImagePath
+                  //             , sequence: sequence
+                  //             , regDate: DateTime.now());
+                  //
                   // 클릭한 타로카드를 추가한다.
                   controller.addSelectedCard(cardImagePath);
 
@@ -110,7 +119,10 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
   /// 다이어리에 아이템을 하나 추가한다.
   ComponentCardView addNewDiaryItem(List<String> selectedCards) {
-    
+    print("addNewDiaryItem");
+    selectedCards.forEach((element) {
+      print(element);
+    });
     
     
     return ComponentCardView(
