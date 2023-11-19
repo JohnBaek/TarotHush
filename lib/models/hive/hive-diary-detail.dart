@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part "hive-diary-detail.g.dart";
 
 /// 스프레드에서 타롯을 선택 후 로컬 데이터베이스에 저장하기위한 모델
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class HiveDiaryDetail {
   // 아이디 값 
   @HiveField(0)

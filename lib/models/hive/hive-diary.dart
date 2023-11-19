@@ -6,11 +6,11 @@ part "hive-diary.g.dart";
 @HiveType(typeId: 0)
 class HiveDiary {
   // 아이디 값 
-  @HiveField(1)
+  @HiveField(0)
   String id;
   
   // 카드 등록시간
-  @HiveField(2)
+  @HiveField(1)
   DateTime regDate;
 
   /// 생성자

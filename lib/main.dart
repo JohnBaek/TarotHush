@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:debounce_throttle/debounce_throttle.dart';
-import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,11 +6,9 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
 import 'package:my_app/models/hive/hive-diary-detail.dart';
-import 'package:my_app/models/hive/hive-diary.dart';
 import 'package:my_app/views/view-diary.dart';
 import 'package:my_app/views/view-none.dart';
 import 'package:my_app/views/view-spreads.dart';
-import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'components/submenus/component-sub-menu-button.dart';
@@ -48,10 +43,14 @@ void main() async {
   
   // Hive 로컬 데이터베이스 이니셜라이즈
   // /Users/john/Library/Containers/com.example.myApp/Data
-  // Hive.init(Directory.current.path);
-  // Hive.registerAdapter(HiveDiaryAdapter());
-  // Hive.registerAdapter(HiveDiaryDetailAdapter());
-
+  // Hive
+  //   ..init(Directory.current.path)
+  //   ..registerAdapter(HiveDiaryAdapter())
+  //   ..registerAdapter(HiveDiaryDetailAdapter());
+  //
+  // var box = await Hive.openBox<HiveDiaryAdapter>('diary');
+  // box.put(HiveDiary(id: const Uuid().v4(), regDate: DateTime.now()));
+  //    
   runApp(GetMaterialApp(navigatorKey: navigatorKey, home: const StartUp()));
   configLoading();
 }
@@ -98,10 +97,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
 
   // 페이지 컨트롤러
   PageController pageController = PageController();
-
-  // 사이드 메뉴 컨트롤러
-  SideMenuController sideMenu = SideMenuController();
-
   WindowEffect effect = WindowEffect.transparent;
   Color color = Colors.transparent;
   MacOSBlurViewState macOSBlurViewState =
@@ -135,11 +130,6 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
     updateWindowResizeDebounced.values.listen((event) {
       // 카드 사이즈를 업데이트한다.
       setCardSize();
-    });
-
-    // 사이드 메뉴 변경시 콜백
-    sideMenu.addListener((index) {
-      pageController.jumpToPage(index);
     });
 
     /// EasyLoading 콜백
