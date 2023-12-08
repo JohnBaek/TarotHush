@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/components/tarotcard/component-tarot-selector.dart';
 import 'package:my_app/models/hive/hive-diary-detail.dart';
@@ -16,13 +19,12 @@ import 'components/submenus/component-sub-menu-title.dart';
 import 'controllers/controller-side-button.dart';
 import 'controllers/controller-tarot-card-list.dart';
 import 'controllers/controller-widget-resize.dart';
+import 'models/enums/enum-tarot-product.dart';
+import 'models/hive/hive-diary.dart';
 import 'navigation-key.dart';
 
 /// 타로 셀렉터 다이얼로그
 late BuildContext tarotSelectorContext;
-
-/// 하이브 데이터베이스
-late Box<HiveDiaryDetail> hiveDatabase;
 
 /// 메인 클래스
 void main() async {
@@ -40,17 +42,21 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-  
+
   // Hive 로컬 데이터베이스 이니셜라이즈
   // /Users/john/Library/Containers/com.example.myApp/Data
-  // Hive
-  //   ..init(Directory.current.path)
-  //   ..registerAdapter(HiveDiaryAdapter())
-  //   ..registerAdapter(HiveDiaryDetailAdapter());
-  //
-  // var box = await Hive.openBox<HiveDiaryAdapter>('diary');
-  // box.put(HiveDiary(id: const Uuid().v4(), regDate: DateTime.now()));
-  //    
+  Hive
+    ..init(Directory.current.path)
+  // 어댑터를 등록 한다.
+    ..registerAdapter(HiveDiaryAdapter())
+    ..registerAdapter(HiveDiaryDetailAdapter())
+    ..registerAdapter(HiveEnumTarotProductAdapter())
+  ;
+
+  // DI 인스턴스 등록
+  GetIt.instance.registerSingleton<Box<HiveDiary>>(await Hive.openBox<HiveDiary>('diary'));
+  GetIt.instance.registerSingleton<Box<HiveDiaryDetail>>(await Hive.openBox<HiveDiaryDetail>('diaryDetail'));
+
   runApp(GetMaterialApp(navigatorKey: navigatorKey, home: const StartUp()));
   configLoading();
 }

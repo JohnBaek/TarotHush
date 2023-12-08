@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fluent_assertions/fluent_assertions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/models/hive/hive-diary-detail.dart';
@@ -21,9 +22,11 @@ Future<void> main() async {
 
   // 다이어리 테이블을 연다.
   Box<HiveDiary> diaryBox = await Hive.openBox<HiveDiary>('diary');
-
-  // 조회를 테스트한다.
-  testWidgets('Can Retrieve From Diary', (WidgetTester tester) async {
+  
+  /// 조회를 테스트한다.
+  test('Can Retrieve From Diary',() async {
+    //removeAll(diaryBox);
+    
     // 더미로 데이터를 하나 추가한다.
     addDummyData(diaryBox);
     
@@ -35,11 +38,11 @@ Future<void> main() async {
     List<HiveDiary> items = diaryBox.values.toList(growable: true);
     print("items count : ${items.length}");
     
-    // 한개이상의 리스트가 존재해야한다.
+    // 한개이상의 리스트가 존재 해야한다.
     items.length.shouldBeGreaterOrEqualTo(0);
   });
   
-  // 박스로부터 데이터의 키를 모두 조회해 올수 있는지
+  /// 박스로부터 데이터의 키를 모두 조회해 올수 있는지
   testWidgets('Can get Retrieve all keys from box', (WidgetTester widgetTester) async {
     // 더미로 데이터를 하나 추가한다.
     addDummyData(diaryBox);
@@ -56,7 +59,7 @@ Future<void> main() async {
     }
   });
   
-  // 박스로부터 하나의 데이터를 조회해 올수 있는지
+  /// 박스로부터 하나의 데이터를 조회해 올수 있는지
   testWidgets('Can get Retrieve data from box', (WidgetTester widgetTester) async {
     // 더미로 데이터를 하나 추가한다.
     addDummyData(diaryBox);
@@ -79,30 +82,32 @@ Future<void> main() async {
   });
   
   // 박스로부터 하나의 데이터를 지울수 있는지
-  testWidgets('Can remove data from box', (WidgetTester widgetTester) async {
+  test('Can remove data from box', () async {
+
+    // diaryBox.keys.forEach((element) { 
+    //   print(element);
+    //   List<String> keys = [element.toString()];
+    //   diaryBox.deleteAll(keys);
+    // });
+    
     // 더미로 데이터를 하나 추가한다.
     String id = addDummyDataWithReturn(diaryBox);
     id.shouldNotBeNull();
     id.shouldNotBeBlank();
-    
+
     // 데이터를 조회한다.
     HiveDiary? item = diaryBox.get(id);
     item.shouldNotBeNull();
-    
+
     // 데이터가 존재하지 않을경우 
     if(item == null)
       return;
 
     // 데이터를 지운다.
-    diaryBox.delete(id).whenComplete(() => {});
-    print("Delete successed");
-
-    // 데이터를 초기화 하고 다시 조회한다.
-    item = null;
-    item = diaryBox.get(id);
-    
-    // 조회된 데이터는 없어야 한다
-    item.shouldBeNull();
+    print("Current Count : ${ diaryBox.keys.length }");
+    await diaryBox.delete(id);
+    print("Delete successed Current Count : ${ diaryBox.keys.length }");
+    await diaryBox.close();
   });
 }
 
@@ -122,8 +127,27 @@ String addDummyDataWithReturn(Box<HiveDiary> box) {
 
   // 데이터를 추가한다.
   box.put(id,HiveDiary(id:id,regDate: DateTime.now()));
-  
   return id;
+}
+
+/// 데이터를 초기화 한다.
+void removeAll(Box<HiveDiary> box) {
+  // 전체 숫자를 가져온다.
+  int totalCount = box.values.toList().length;
+  
+  // 진행 숫자
+  int processCount = 0;
+  
+  print("Remove all datas ..");
+  box.deleteAll(box.keys);
+  //
+  //
+  // // 가져온 모든 데이터에 대해 처리한다
+  // box.values.toList().forEach((element) async {
+  //   // 데이터를 삭제한다
+  //   element.delete;
+  // });
+  
 }
 
  

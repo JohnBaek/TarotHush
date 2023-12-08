@@ -5,17 +5,21 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:my_app/components/component-card-view.dart';
 import 'package:my_app/components/tarotcard/component-tarot-card-core.dart';
+import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/views/view-diary-controller.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../controllers/controller-tarot-card-list.dart';
 import '../../models/hive/hive-diary-detail.dart';
+import '../../models/responses/Response.dart';
 import 'component-tarot-card-front.dart';
 import '../../navigation-key.dart';
 
 /// 타로 카드 완전체 객체
 class ComponentTarotCardFlip extends StatelessWidget {
+  // 카드이미지의 저장 경로 
   final String cardImagePath;
+  /// 생성자 
   const ComponentTarotCardFlip({super.key, required this.cardImagePath});
   
   @override
@@ -27,7 +31,7 @@ class ComponentTarotCardFlip extends StatelessWidget {
           builder: (TarotCardSelectorController controller) { 
             return
               GestureDetector(
-                onTap:() {
+                onTap:() async {
                   // 타로 카드 셀렉터 컨트롤러를 가져온다.
                   TarotCardSelectorController selectorController = Get.find<TarotCardSelectorController>();
 
@@ -35,16 +39,15 @@ class ComponentTarotCardFlip extends StatelessWidget {
                   if(selectorController.isCompleted()) {
                     return;
                   }
-                  //
-                  // // 저장할 타로 카드 Hive 객체를 생성한다.
-                  // StoredSelectedTarot addNewCard = 
-                  //         StoredSelectedTarot(id: const Uuid().v4()
-                  //             , imagePath: cardImagePath
-                  //             , sequence: sequence
-                  //             , regDate: DateTime.now());
-                  //
+
                   // 클릭한 타로카드를 추가한다.
-                  controller.addSelectedCard(cardImagePath);
+                  ResponseResult result = await controller.addSelectedCardAsync(cardImagePath);
+
+                  // 실패일경우
+                  if(result.result != EnumResponseResult.Success) {
+                    EasyLoading.showToast(result.message);
+                    return;
+                  }
 
                   // 선택이 완료된경우 2초후 자동 닫힘
                   if(selectorController.isCompleted()) {

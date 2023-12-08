@@ -64,8 +64,6 @@ class ComponentCardView extends StatelessWidget {
                 ),
             ],
           ),
-          
-         
           // 컨텐츠 위젯
           child,
         ],

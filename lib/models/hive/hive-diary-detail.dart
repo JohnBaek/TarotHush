@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../enums/enum-tarot-product.dart';
+
 part "hive-diary-detail.g.dart";
 
 /// 스프레드에서 타롯을 선택 후 로컬 데이터베이스에 저장하기위한 모델
@@ -25,11 +27,16 @@ class HiveDiaryDetail {
   @HiveField(4)
   DateTime regDate;
 
-  /// 생성자
+  // 카드 종류
+  @HiveField(5)
+  EnumTarotProduct enumTarotProduct;
+
   HiveDiaryDetail({
-      required this.id
+    required this.id
     , required this.diaryId
     , required this.imagePath
     , required this.sequence
-    , required this.regDate});
+    , required this.regDate
+    , required this.enumTarotProduct
+    });
 }
