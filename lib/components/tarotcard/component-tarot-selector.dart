@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/controller-tarot-card-list.dart';
+import 'component-tarot-card-controller.dart';
+import 'component-tarot-card.dart';
 
 /// 다이어리뷰 메인 페이지
 class ComponentTarotSelector extends StatelessWidget {
@@ -10,7 +11,7 @@ class ComponentTarotSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TarotCardSelectorController>(builder: (controller) {
+    return GetBuilder<ComponentTarotCardController>(builder: (controller) {
       double widthWidget = MediaQuery.of(context).size.width;
       double cardWith = 100;
       double stackSkew = 0.5;
@@ -30,7 +31,7 @@ class ComponentTarotSelector extends StatelessWidget {
         margin: const EdgeInsets.only(top: 50),
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Stack(children: [
-          ...controller.tarotCards
+          ...controller.cardMetaDataList
               .asMap()
               .map(
                 (index, card) {
@@ -43,7 +44,11 @@ class ComponentTarotSelector extends StatelessWidget {
                                 (cardsPerRow) * (index / cardsPerRow).floor()),
                         top: (top) * (index / cardsPerRow).floor(),
                         child: MouseRegion(
-                        cursor: SystemMouseCursors.click, child: card)),
+                        cursor: 
+                          SystemMouseCursors.click, 
+                          child:
+                            ComponentTarotCard(tarotCardMetadata: card)
+                        )),
                   );
                 },
               )

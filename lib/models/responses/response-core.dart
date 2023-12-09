@@ -3,13 +3,13 @@ import "../enums/enum-response-result.dart";
 /// 응답 기본 코어 클래스
 class ResponseCore {
   // 응답 결과
-  EnumResponseResult result = EnumResponseResult.error;
+  late EnumResponseResult result = EnumResponseResult.error;
 
   // 응답 메세지
-  String message = "";
+  late String message = "";
 
   // 응답코드
-  String code = "";
+  late String code = "";
   
   /// 생성자
   /// [result] 응답 결과

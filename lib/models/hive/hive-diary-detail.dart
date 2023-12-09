@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../enums/enum-tarot-product.dart';
+import 'hive-tarot-card-metadata.dart';
 
 part "hive-diary-detail.g.dart";
 
@@ -15,9 +16,9 @@ class HiveDiaryDetail {
   @HiveField(1)
   String diaryId;
   
-  // 카드 이미지 경로
+  // 선택한 카드 데이터
   @HiveField(2)
-  String imagePath;
+  HiveTarotCardMetadata metadata;
 
   // 카드 시퀀스 번호
   @HiveField(3)
@@ -34,7 +35,7 @@ class HiveDiaryDetail {
   HiveDiaryDetail({
     required this.id
     , required this.diaryId
-    , required this.imagePath
+    , required this.metadata
     , required this.sequence
     , required this.regDate
     , required this.enumTarotProduct

@@ -14,7 +14,7 @@ import '../models/hive/hive-diary-detail.dart';
 import '../models/responses/response-core.dart';
 import '../models/responses/diary/response-diary.dart';
 import '../models/responses/response-list.dart';
-import '../services/logger.dart';
+import '../utils/logger.dart';
 
 /// 하이브 다이어리 프로바이더
 class HiveDiaryProvider extends GetxController{

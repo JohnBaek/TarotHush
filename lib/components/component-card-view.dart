@@ -4,17 +4,17 @@ import 'package:intl/intl.dart';
 
 import 'component-button.dart';
 
-/// 화면에 표시될 말풍선 카드 뷰 위젯
-class ComponentCardView extends StatelessWidget {
-  /// 컨텐츠 위젯
+/// 화면에 표시될 다이어리 위젯
+class ComponentDiaryItem extends StatelessWidget {
+  // 컨텐츠 위젯
   final Widget child;
   
-  /// 좌상단 위젯 
+  // 좌상단 위젯 
   final Widget? leftTopChild;
   
-  /// 날짜 정보 
+  // 날짜 정보 
   final DateTime? dateTime; 
-  const ComponentCardView({super.key, required this.child, required this.dateTime, this.leftTopChild});
+  const ComponentDiaryItem({super.key, required this.child, required this.dateTime, this.leftTopChild});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class ComponentCardView extends StatelessWidget {
               if(dateTime != null)
                 Container(
                   alignment: Alignment.topRight,
-                  child: Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime!)),
+                  child: Text(DateFormat('HH:mm:ss').format(dateTime!)),
                 ),
             ],
           ),

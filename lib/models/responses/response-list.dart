@@ -1,7 +1,20 @@
+import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/models/responses/response-core.dart';
 
 /// List<T> 의 응답 데이터 리스트를 포함하는 응답 결과 모델
 class ResponseList<T> extends ResponseCore {
+  // 페이징 될 숫자 
+  int pageCount = 0;
+
+  // 현재 스킵
+  int skip = 0;
+
+  // 전체 갯수
+  int totalCount = 0;
+
+  // List<T> 로 지정된 응답 데이터
+  List<T> items = [];
+  
   /// 부모 생성자
   ResponseList({required super.result, required super.code, required super.message});
 
@@ -28,16 +41,4 @@ class ResponseList<T> extends ResponseCore {
   , required this.skip
   , required this.totalCount
   });
-  
-  // 페이징 될 숫자 
-  int pageCount = 0;
-  
-  // 현재 스킵
-  int skip = 0;
-  
-  // 전체 갯수
-  int totalCount = 0;
-
-  // List<T> 로 지정된 응답 데이터
-  List<T> items = [];
 }
