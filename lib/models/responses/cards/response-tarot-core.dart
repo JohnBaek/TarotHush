@@ -1,4 +1,4 @@
-import '../enums/enum-tarot-product.dart';
+import '../../enums/enum-tarot-product.dart';
 
 class ResponseTarotCore {
   /// 타이틀

@@ -8,9 +8,7 @@ import 'package:my_app/models/hive/hive-diary-detail.dart';
 import 'package:my_app/models/hive/hive-diary.dart';
 import 'package:uuid/uuid.dart';
 
-/**
- * Hive 유닛 테스트
- */
+/// Hive 기본 기능 관련 유닛 테스트
 Future<void> main() async {
   // Hive 로컬 데이터베이스 이니셜라이즈
   // /Users/john/Library/Containers/com.example.myApp/Data

@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_app/components/tarotcard/component-tarot-card-flip.dart';
 import 'package:my_app/models/enums/enum-response-result.dart';
-import 'package:my_app/models/enums/enum-spread-type.dart';
+import 'package:my_app/models/enums/enum-card-spread-type.dart';
 
-import '../models/cards/response-tarot-core.dart';
+import '../models/responses/cards/response-tarot-core.dart';
 import '../models/enums/enum-tarot-product.dart';
-import '../models/responses/Response.dart';
+import '../models/responses/response-core.dart';
 import '../models/tarot-list.dart';
 import '../providers/tarot-card-provider.dart';
-import '../services/error-handler.dart';
+import '../services/logger.dart';
 
 /// 위젯 리사이즈 컨트롤러 
 class TarotCardSelectorController extends GetxController {
@@ -108,13 +108,13 @@ class TarotCardSelectorController extends GetxController {
   }
 
   /// 스프레드 카운트를 세팅한다.
-  void setCompleteCount(EnumSpreadType enumSpreadType) {
+  void setCompleteCount(EnumCardSpreadType enumSpreadType) {
     switch(enumSpreadType) {
       // 쓰리카드 스프레드인경우 
-      case EnumSpreadType.threeCardSpread :
+      case EnumCardSpreadType.threeCardSpread :
         completeCount = 3;
         break;
-      case EnumSpreadType.oneCardSpread:
+      case EnumCardSpreadType.oneCardSpread:
         completeCount = 1;
         break;
     }

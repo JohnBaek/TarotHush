@@ -1,4 +1,4 @@
-import 'package:my_app/models/cards/response-tarot-core.dart';
+import 'package:my_app/models/responses/cards/response-tarot-core.dart';
 
 import 'enums/enum-tarot-product.dart';
 

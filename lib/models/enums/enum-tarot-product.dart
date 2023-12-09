@@ -2,8 +2,10 @@ import 'package:hive/hive.dart';
 
 /// 타로 제품 타입
 enum EnumTarotProduct {
-  /// 라이더 웨이트
-  riderWaited;
+  // 라이더 웨이트
+  riderWaited ,
+  // 유니버셜 웨이트
+  universalWaited ,
 }
 
 class HiveEnumTarotProductAdapter extends TypeAdapter<EnumTarotProduct> {

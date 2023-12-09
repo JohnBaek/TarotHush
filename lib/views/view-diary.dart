@@ -7,12 +7,12 @@ import 'package:my_app/components/component-card-view.dart';
 import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/views/view-diary-controller.dart';
 
-import '../../models/enums/enum-spread-type.dart';
+import '../../models/enums/enum-card-spread-type.dart';
 import '../components/tarotcard/component-tarot-card-front.dart';
 import '../components/tarotcard/component-tarot-selector.dart';
 import '../controllers/controller-tarot-card-list.dart';
-import '../models/responses/ResponseDiary.dart';
-import '../models/responses/ResponseList.dart';
+import '../models/responses/diary/response-diary.dart';
+import '../models/responses/response-list.dart';
 import '../providers/tarot-card-provider.dart';
 
 /// 다이어리 뷰 페이지 
@@ -85,14 +85,14 @@ class ViewDiary extends StatelessWidget {
                           width: 120,
                           height: 40,
                           onTap:(){
-                            selectSpread(context,EnumSpreadType.threeCardSpread);
+                            selectSpread(context,EnumCardSpreadType.threeCardSpread);
                           } , color: Colors.blueAccent),
                       // 1카드 스프레드 버튼
                       ComponentButton(name: '1Card Spread',
                           width: 120,
                           height: 40,
                           onTap:(){
-                            selectSpread(context,EnumSpreadType.oneCardSpread);
+                            selectSpread(context,EnumCardSpreadType.oneCardSpread);
                           } , color: Colors.blueAccent)
                     ],
                   )
@@ -104,7 +104,7 @@ class ViewDiary extends StatelessWidget {
   }
 
   /// 타로 카드 스프레드를 선택한다.
-  selectSpread(BuildContext context, EnumSpreadType enumSpreadType) async {
+  selectSpread(BuildContext context, EnumCardSpreadType enumSpreadType) async {
     // 타로 카드 셀렉터 컨트롤러를 가져온다.
     TarotCardSelectorController controller = Get.find<TarotCardSelectorController>();
 
@@ -136,7 +136,7 @@ class ViewDiary extends StatelessWidget {
     ResponseList<ResponseDiary> response = diaryProvider.getDiaryList();
     
     // 데이터 조회에 실패한경우
-    if(response.result != EnumResponseResult.Success) {
+    if(response.result != EnumResponseResult.success) {
       EasyLoading.showError(response.message);
       return;
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:my_app/models/responses/ResponseDiary.dart';
+import 'package:my_app/models/responses/diary/response-diary.dart';
 
 import '../components/component-card-view.dart';
 

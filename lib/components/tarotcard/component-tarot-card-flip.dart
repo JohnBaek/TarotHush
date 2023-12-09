@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../controllers/controller-tarot-card-list.dart';
 import '../../models/hive/hive-diary-detail.dart';
-import '../../models/responses/Response.dart';
+import '../../models/responses/response-core.dart';
 import '../../providers/tarot-card-provider.dart';
 import 'component-tarot-card-front.dart';
 import '../../navigation-key.dart';
@@ -46,10 +46,10 @@ class ComponentTarotCardFlip extends StatelessWidget {
 
                   // 선택이 완료된경우 2초후 자동 닫힘
                   if(selectorController.isCompleted()) {
-                    ResponseResult response = await Get.find<HiveDiaryProvider>().addCardsAsync(selectorController.selectedCards);
+                    ResponseCore response = await Get.find<HiveDiaryProvider>().addCardsAsync(selectorController.selectedCards);
                     
                     // 요청에 실패한 경우 
-                    if(response.result != EnumResponseResult.Success) {
+                    if(response.result != EnumResponseResult.success) {
                       EasyLoading.showError(response.message);
                     }
 

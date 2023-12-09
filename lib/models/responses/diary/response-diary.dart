@@ -1,5 +1,5 @@
 
-import '../enums/enum-tarot-product.dart';
+import '../../enums/enum-tarot-product.dart';
 
 /// 다이어리 응답 객체
 class ResponseDiary {
