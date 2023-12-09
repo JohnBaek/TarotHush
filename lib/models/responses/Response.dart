@@ -4,13 +4,13 @@ import "../enums/enum-response-result.dart";
 class ResponseResult {
   // 응답 결과
   EnumResponseResult result = EnumResponseResult.Error;
-  
+
   // 응답 메세지
   String message = "";
-  
+
   // 응답코드
   String code = "";
-
+  
   /// 생성자 
   ResponseResult(this.code,this.message);
 

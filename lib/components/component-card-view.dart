@@ -60,7 +60,7 @@ class ComponentCardView extends StatelessWidget {
               if(dateTime != null)
                 Container(
                   alignment: Alignment.topRight,
-                  child: Text(DateFormat('HH:mm:ss').format(dateTime!)),
+                  child: Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime!)),
                 ),
             ],
           ),

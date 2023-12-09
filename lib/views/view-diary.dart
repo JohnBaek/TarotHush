@@ -1,12 +1,19 @@
+import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:my_app/components/component-button.dart';
 import 'package:my_app/components/component-card-view.dart';
+import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/views/view-diary-controller.dart';
 
 import '../../models/enums/enum-spread-type.dart';
+import '../components/tarotcard/component-tarot-card-front.dart';
 import '../components/tarotcard/component-tarot-selector.dart';
 import '../controllers/controller-tarot-card-list.dart';
+import '../models/responses/ResponseDiary.dart';
+import '../models/responses/ResponseList.dart';
+import '../providers/tarot-card-provider.dart';
 
 /// 다이어리 뷰 페이지 
 class ViewDiary extends StatelessWidget {
@@ -17,6 +24,8 @@ class ViewDiary extends StatelessWidget {
     Get.put(ViewDiaryController());
     return
     GetBuilder<ViewDiaryController>(builder: (controller) {
+      // 기존에 저장되어있던 정보를 불러온다.
+      loadData(controller);
       return
         Container(
             margin: const EdgeInsets.only(top: 30),
@@ -28,10 +37,41 @@ class ViewDiary extends StatelessWidget {
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemCount: controller.cardViewItems.length,
+                    itemCount: controller.diaryCards.length,
                     itemBuilder: (context,index){
-                      return 
-                        controller.cardViewItems[index];
+                      ResponseDiary item = controller.diaryCards[index];
+                      return
+                        ComponentCardView(
+                          dateTime:item.regDate,
+                          child:
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // 모든 카드에 대해 처리한다.
+                              for(ResponseDiaryDetail detail in item.diaryDetails.orderBy((item) => item.sequence))
+                                Column(
+                                  children: [
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
+                                      onTap: () async {
+                                        showTarotScreen(context,detail.imagePath);
+                                      },
+                                      child:
+                                      MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child:Container(
+                                              margin: const EdgeInsets.fromLTRB(20,20,20,10),
+                                              child: ComponentTarotCardFront(cardImagePath: detail.imagePath,width: 100,height: 180)
+                                          )
+                                      ),
+                                    ),
+                                    // 선택된 카드의 번호
+                                    Text(detail.sequence.toString())
+                                  ],
+                                )
+                            ],
+                          ),
+                        );
                     },
                   ),
                 ),
@@ -84,6 +124,45 @@ class ViewDiary extends StatelessWidget {
         controller.setContext(context);
         return const ComponentTarotSelector();
       },
+    );
+  }
+  
+  /// 기존 정보를 가져온다.
+  void loadData(ViewDiaryController controller) {
+    // 프로바이더를 가져온다.
+    HiveDiaryProvider diaryProvider = Get.find<HiveDiaryProvider>();
+    
+    // 데이터를 가져온다.
+    ResponseList<ResponseDiary> response = diaryProvider.getDiaryList();
+    
+    // 데이터 조회에 실패한경우
+    if(response.result != EnumResponseResult.Success) {
+      EasyLoading.showError(response.message);
+      return;
+    }
+    controller.addItems(response.items);
+  }
+
+  void showTarotScreen(BuildContext context, String imagePath) {
+    showDialog(
+        context: context,
+        barrierDismissible: true, // 바깥 영역 터치시 닫을지 여부
+        builder: (buildContext) {
+          return
+            GetBuilder<TarotCardSelectorController>(
+                builder: (TarotCardSelectorController controller) {
+                  return
+                    Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: ComponentTarotCardFront(
+                          width: 300,
+                          height: 500,
+                          cardImagePath: imagePath,
+                        )
+                    );
+                }
+            );
+        }
     );
   }
 }
