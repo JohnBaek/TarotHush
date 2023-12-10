@@ -16,6 +16,9 @@ import '../../models/responses/response-list.dart';
 
 /// 카드 뷰 컨트롤러 
 class ViewDiaryController extends GetxController {
+  // 최초 데이터 패칭 여부
+  bool _hasFetched = false;
+  
   // 다이어리 리스트
   List<ResponseDiary> diaryList = [];
   
@@ -25,18 +28,31 @@ class ViewDiaryController extends GetxController {
   // 다이어리 디테일 박스
   late final Box<HiveDiaryDetail> _hiveDiaryDetailBox;
   
-  
   @override
   void onInit() {
     super.onInit();
     _hiveDiaryBox = GetIt.instance<Box<HiveDiary>>();
     _hiveDiaryDetailBox = GetIt.instance<Box<HiveDiaryDetail>>();
   }
-
+  
+  /// 패치 여부를 업데이트한다
+  /// [hasFetched] 패치 여부
+  void updateFetch(bool hasFetched){
+    _hasFetched = hasFetched;
+    update();
+  }
+  
+  
   /// 다이어리 리스트를 추가한다.
   /// [list] 다이어리 리스트
   void addDiaryList(List<ResponseDiary> list){
     diaryList.addAll(list);
+    update();
+  }
+  
+  /// 다이어리 리스트를 초기화한다.
+  void clearDiary() {
+    diaryList = [];
     update();
   }
   
@@ -75,6 +91,20 @@ class ViewDiaryController extends GetxController {
     }
     return result;
   } 
+  
+  /// 패치 여부 플래그를 반환한다.
+  bool getHasFetched() {
+    return _hasFetched;
+  }
+
+  /// 다이어리를 추가한다.
+  /// [diary] ResponseDiary 객체
+  void addDiary(ResponseDiary diary) {
+    // 데이터를 추가한다.
+    diaryList.insert(0, diary);
+    update();
+  }
+  
   //
   // /// 다이어리에 데이터를 하나 추가한다.
   // Future<ResponseData<ResponseTarotCardMetadata>> addDiaryAsync(ResponseTarotCardMetadata metadata) async{

@@ -30,9 +30,10 @@ class ComponentSubMenuButton extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               // 클릭시
               onTap: () {
-                // 선택한 버튼의 이름을 추가한다.
-                controller.click(name);
-                onTap();
+                // 클릭 이벤트를 전달해야 하는 경우
+                if(controller.shouldInvoke(name)) {
+                  onTap();
+                }
               },
               child: Container(
                   // 선택된 버튼이랑 일치하는 경우 선택 표시

@@ -194,6 +194,12 @@ class _StartUpStateState extends State<StartUpState> with WindowListener {
                         const ComponentSubMenuTitle(
                           name: 'Playing',
                         ),
+                        ComponentSubMenuButton(
+                            name: 'Home',
+                            iconData: Icons.access_alarm,
+                            onTap: () {
+                              toView(const ViewNone());
+                            }),
                         // 다이어리 뷰 버튼
                         ComponentSubMenuButton(
                             name: 'Diary',

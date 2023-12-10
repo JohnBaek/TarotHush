@@ -8,15 +8,14 @@ import 'package:my_app/components/tarotcard/component-tarot-card-core.dart';
 import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/models/responses/cards/response-tarot-metadata.dart';
 import 'package:my_app/utils/logger.dart';
-import 'package:my_app/views/diary/view-diary-controller.dart';
-import 'package:uuid/uuid.dart';
 
-import 'component-tarot-card-controller.dart';
-import '../../models/hive/hive-diary-detail.dart';
+import '../../models/responses/diary/response-diary.dart';
 import '../../models/responses/response-core.dart';
-import '../../providers/tarot-card-provider.dart';
-import 'component-tarot-card-front.dart';
+import '../../models/responses/response-data.dart';
 import '../../navigation-key.dart';
+import '../../views/diary/view-diary-controller.dart';
+import 'component-tarot-card-controller.dart';
+import 'component-tarot-card-front.dart';
 
 /// 타로 카드 객체
 class ComponentTarotCard extends StatelessWidget {
@@ -179,12 +178,16 @@ class ComponentTarotCard extends StatelessWidget {
       // 선택이 완료된경우 2초후 자동 닫힘
       if(controller.selectedCompleted()) {
         // 데이터베이스에 선택된 카드를 추가한다.
-        ResponseCore responseCore = await controller.syncSelectedCardAsync();
+        ResponseData<ResponseDiary> response = await controller.syncSelectedCardAsync();
         
         // 실패한 경우
-        if(responseCore.result != EnumResponseResult.success) {
-          EasyLoading.showError(responseCore.message);
+        if(response.result != EnumResponseResult.success) {
+          EasyLoading.showError(response.message);
         }
+        
+        // 다이어리에 데이터 업데이트
+        ViewDiaryController diaryController = Get.find<ViewDiaryController>();
+        diaryController.addDiary(response.data);
         
         dismissTarotSelectorDialog(controller);
       } 

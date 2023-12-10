@@ -14,7 +14,7 @@ class ResponseDiary {
   late DateTime regDate;
   
   // 다이어리 상세
-  late List<ResponseDiaryDetail> items;
+  late List<ResponseDiaryDetail> items = [];
 
   /// 생성자
   /// [hiveDiary] 하이브 다이어리 객체 
@@ -49,5 +49,6 @@ class ResponseDiaryDetail {
   ResponseDiaryDetail.fromHive(HiveDiaryDetail hiveDiaryDetail){
     id = hiveDiaryDetail.id;
     metadata = hiveDiaryDetail.metadata.toResponse();
+    sequence = hiveDiaryDetail.sequence;
   }
 }

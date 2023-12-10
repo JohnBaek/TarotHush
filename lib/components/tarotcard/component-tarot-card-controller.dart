@@ -10,6 +10,8 @@ import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/models/enums/enum-card-spread-type.dart';
 import 'package:my_app/models/hive/hive-diary-detail.dart';
 import 'package:my_app/models/hive/hive-diary.dart';
+import 'package:my_app/models/responses/diary/response-diary.dart';
+import 'package:my_app/models/responses/response-data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/v4.dart';
 
@@ -164,12 +166,15 @@ class ComponentTarotCardController extends GetxController {
   }
   
   /// 선택된 카드를 데이터베이스에 업데이트 한다.
-  Future<ResponseCore> syncSelectedCardAsync() async {
-    ResponseCore result;
+  Future<ResponseData<ResponseDiary>> syncSelectedCardAsync() async {
+    ResponseData<ResponseDiary> result;
     try {
       // 다이어리 정보를 추가한다.
       HiveDiary addDiary = HiveDiary(id: const Uuid().v4(), regDate: DateTime.now());
       await _diaryBox.put(addDiary.id, addDiary);
+
+      // 데이터 추가후 응답을 위한 객체를 생성 한다.
+      ResponseDiary responseDiary = ResponseDiary.fromHive(addDiary);
       
       // 다이어리 상세 정보를 추가한다.
       int sequence = 0;
@@ -186,11 +191,14 @@ class ComponentTarotCardController extends GetxController {
         
         // 데이터베이스에 저장한다.
         await _diaryDetailBox.put(addDetail.id, addDetail);
+
+        // 데이터 추가후 응답을 위한 객체를 생성 한다.
+        responseDiary.items.add(ResponseDiaryDetail.fromHive(addDetail));
       }
       
-      result = ResponseCore.result(result: EnumResponseResult.success);
+      result = ResponseData<ResponseDiary>.withData(result: EnumResponseResult.success, code: "", message: "", data: responseDiary);
     }catch(ex) {
-      result = ResponseCore(result: EnumResponseResult.error, code: "CM001", message: "데이터 처리중 예외가 발생했습니다.");
+      result = ResponseData<ResponseDiary>(result: EnumResponseResult.error, code: "CM001", message: "데이터 처리중 예외가 발생했습니다.");
       Logger.error(ex);
     }
     return result;

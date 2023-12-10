@@ -20,8 +20,8 @@ class ViewDiary extends StatelessWidget {
   const ViewDiary({Key? key}): super(key:key);
   @override
   Widget build(BuildContext context) {
-    // 뷰 다이어리 컨트롤러 등록
     Get.put(ViewDiaryController());
+    fetchDiary();
     return
       GetBuilder<ViewDiaryController>(builder: (controller) {
         return
@@ -32,15 +32,8 @@ class ViewDiary extends StatelessWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 70),
-                  child: FutureBuilder(
-                    future: fetchDiary(controller),
-                    builder: (context, snapshot) {
-                      // 데이터를 불러오는 중일경우
-                      // if (snapshot.connectionState == ConnectionState.waiting) {
-                      //   return const CircularProgressIndicator(); // Show a loading indicator while data is being fetched
-                      // }
-                      // 다이어리 리스트
-                      return ListView.builder(
+                  child:
+                    ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: controller.diaryList.length,
@@ -79,10 +72,7 @@ class ViewDiary extends StatelessWidget {
                               ),
                             );
                         },
-                      );
-                    }
-                  )
-                  
+                      )
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
@@ -163,9 +153,16 @@ class ViewDiary extends StatelessWidget {
   }
 
   /// 다이어리 데이터를 가져온다.
-  /// [controller] ViewDiaryController 객체
-  Future<void> fetchDiary(ViewDiaryController controller) async {
+  Future<void> fetchDiary() async {
     try {
+      // 컨트롤러를 가져온다.
+      ViewDiaryController controller = Get.find<ViewDiaryController>();
+      
+      // 이미 패치 한경우
+      if(controller.getHasFetched()) {
+        return;
+      }
+      
       // 데이터를 조회한다.
       ResponseList<ResponseDiary> response = await controller.getDiaryAsync();
       
@@ -177,10 +174,13 @@ class ViewDiary extends StatelessWidget {
       
       // 데이터를 추가한다.
       controller.addDiaryList(response.items);
+      // 패치 여부를 업데이트한다.
+      controller.updateFetch(true);
     }
     catch(ex){
       Logger.error(ex);
       EasyLoading.showError("데이터를 가져오는중 예외가 발생했습니다.");
     }
   }
+
 }

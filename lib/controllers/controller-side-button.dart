@@ -6,13 +6,14 @@ class SideMenuButtonController extends GetxController {
   String selectedButtonName = '';
 
   /// 버튼을 클릭한다.
-  void click(String name){
+  bool shouldInvoke(String name){
     // 동일한 버튼일 경우 
     if(selectedButtonName == name) {
-      return;
+      return false;
     }
     
     selectedButtonName = name;
     update();
+    return true;
   }
 }
