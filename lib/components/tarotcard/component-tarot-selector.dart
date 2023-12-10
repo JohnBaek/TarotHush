@@ -47,7 +47,7 @@ class ComponentTarotSelector extends StatelessWidget {
                         cursor: 
                           SystemMouseCursors.click, 
                           child:
-                            ComponentTarotCard(tarotCardMetadata: card)
+                            ComponentTarotCard(metadata: card)
                         )),
                   );
                 },

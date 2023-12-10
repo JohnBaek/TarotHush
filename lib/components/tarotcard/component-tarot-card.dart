@@ -20,11 +20,11 @@ import 'component-tarot-card-front.dart';
 /// 타로 카드 객체
 class ComponentTarotCard extends StatelessWidget {
   // 타로카드 메타 정보 
-  final ResponseTarotCardMetadata tarotCardMetadata;
+  final ResponseTarotCardMetadata metadata;
   
   /// 생성자 
-  /// [tarotCardMetadata] 타로카드 메타정보
-  const ComponentTarotCard({super.key, required this.tarotCardMetadata});
+  /// [metadata] 타로카드 메타정보
+  const ComponentTarotCard({super.key, required this.metadata});
   
   @override
   Widget build(BuildContext context) => Card(
@@ -37,17 +37,19 @@ class ComponentTarotCard extends StatelessWidget {
               GestureDetector(
                 // 타로카드 클릭시
                 onTap:() async {
-                  clickCard(controller,tarotCardMetadata);
+                  clickCard(controller,metadata);
                 } ,
                 child: Stack(
                   children: [
                     // 카드의 앞면
-                    ComponentTarotCardFront(imagePath:tarotCardMetadata.imagePath ,width: 70 ,height: 120),
+                    ComponentTarotCardFront(metadata: metadata, width: 70 ,height: 120, onTap: (ResponseTarotCardMetadata metadata) {  
+                      showTarotScreen(context, metadata.imagePath);
+                    },),
                     
                     // 카드를 클릭해서 선택한 경우 카드의 뒷면을 보이게 처리하기 위한
                     Visibility(
                         // 선택하지 않은경우 뒷면을 보인다.
-                        visible: !controller.hasSelected(tarotCardMetadata) ,
+                        visible: !controller.hasSelected(metadata) ,
                         child:
                         const Stack(
                           alignment: Alignment.center,
@@ -103,46 +105,6 @@ class ComponentTarotCard extends StatelessWidget {
     // viewDiaryController.addItem(addNewDiaryItem(cardList));
   }
 
-  /// 다이어리에 아이템을 하나 추가한다.
-  ComponentDiaryItem addNewDiaryItem(List<String> selectedCards) {
-    print("addNewDiaryItem");
-    selectedCards.forEach((element) {
-      print(element);
-    });
-    return ComponentDiaryItem(
-      dateTime: DateTime.now(),
-      child:
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 모든 카드에 대해 처리한다.
-          for(int i=0; i < selectedCards.length; i++)
-            Column(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () async {
-                    print(selectedCards[i]);
-                    showTarotScreen(navigatorKey.currentContext!,selectedCards[i]);
-                  },
-                  child:
-                  MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child:Container(
-                          margin: const EdgeInsets.fromLTRB(20,20,20,10),
-                          child: ComponentTarotCardFront(imagePath: selectedCards[i],width: 100,height: 180)
-                      )
-                  ),
-                ),
-                // 선택된 카드의 번호
-                Text((i + 1).toString())
-              ],
-            )
-        ],
-      ),
-    );
-  }
-
   /// 확대된 타로카드를 출력한다.
   showTarotScreen(BuildContext buildContext, String selectedCard)  {
     showDialog(
@@ -158,7 +120,8 @@ class ComponentTarotCard extends StatelessWidget {
                         child: ComponentTarotCardFront(
                           width: 300,
                           height: 500,
-                          imagePath: selectedCard,
+                          metadata: metadata,
+                          onTap: (ResponseTarotCardMetadata metadata) {}, 
                         )
                     );
                 }
@@ -169,11 +132,11 @@ class ComponentTarotCard extends StatelessWidget {
 
   /// 카드 클릭시
   /// [controller] ComponentTarotCardController 객체
-  /// [tarotCardMetadata] 타로카드 메타 데이터
-  Future<void> clickCard(ComponentTarotCardController controller, ResponseTarotCardMetadata tarotCardMetadata) async {
+  /// [metadata] 타로카드 메타데이터
+  Future<void> clickCard(ComponentTarotCardController controller, ResponseTarotCardMetadata metadata) async {
     try {
       // 카드 추가
-      controller.addSelectedCard(tarotCardMetadata);
+      controller.addSelectedCard(metadata);
 
       // 선택이 완료된경우 2초후 자동 닫힘
       if(controller.selectedCompleted()) {

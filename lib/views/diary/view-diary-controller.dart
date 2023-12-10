@@ -1,17 +1,13 @@
 import 'package:darq/darq.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/models/enums/enum-response-result.dart';
-import 'package:my_app/models/responses/cards/response-tarot-metadata.dart';
 import 'package:my_app/models/responses/diary/response-diary.dart';
 import 'package:my_app/utils/logger.dart';
 
-import '../../components/component-card-view.dart';
 import '../../models/hive/hive-diary-detail.dart';
 import '../../models/hive/hive-diary.dart';
-import '../../models/responses/response-data.dart';
 import '../../models/responses/response-list.dart';
 
 /// 카드 뷰 컨트롤러 
@@ -104,19 +100,6 @@ class ViewDiaryController extends GetxController {
     diaryList.insert(0, diary);
     update();
   }
-  
-  //
-  // /// 다이어리에 데이터를 하나 추가한다.
-  // Future<ResponseData<ResponseTarotCardMetadata>> addDiaryAsync(ResponseTarotCardMetadata metadata) async{
-  //   ResponseData<ResponseTarotCardMetadata> result;
-  //   try {
-  //    
-  //    
-  //   }catch(ex) {
-  //     Logger.error(ex);
-  //   }
-  //   return result;
-  // }
 }
     
     

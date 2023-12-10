@@ -97,40 +97,6 @@ class ComponentTarotCardController extends GetxController {
     return selectedCardList.any((element) => element == cardMetadata);
   }
   
-  // /// 카드를 추가한다.
-  // Future<ResponseResult> addSelectedCardAsync(String cardImagePath) async {
-  //   ResponseResult response;
-  //   try {
-  //     // 등록된적 있는 카드인경우 
-  //     if(selectedCards.any((item) => item == cardImagePath)) {
-  //       return ResponseResult("CME001", "등록된적이 있는 카드입니다.");
-  //     }
-  //     //
-  //     // // 데이터베이스에 카드를 추가한다.
-  //     // response = await m_hiveDiaryProvider.addCardToDiaryAsync(
-  //     //     EnumTarotProduct.riderWaited ,
-  //     //     cardImagePath,
-  //     //     1
-  //     // );
-  //
-  //     // // 결과가 성공이 아닌경우
-  //     // if(response.result != EnumResponseResult.Success) {
-  //     //   return response;
-  //     // }
-  //
-  //     // 선택된 카드에 추가한다.
-  //     selectedCards.add(cardImagePath);
-  //
-  //     // UI 를 업데이트한다.
-  //     update();
-  //   } catch(ex) {
-  //     response = ResponseResult("CME099", "에러가 발생했습니다.");
-  //     ErrorHandler.log(ex);
-  //   }
-  //   return response;
-  // }
-
-  
   /// 선택한 카드를 초기화한다.
   void clearSelectedCards(){
     // 선택된 카드 초기화
