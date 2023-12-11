@@ -6,21 +6,16 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:my_app/components/tarotcard/component-tarot-card.dart';
-import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/models/enums/enum-card-spread-type.dart';
+import 'package:my_app/models/enums/enum-response-result.dart';
 import 'package:my_app/models/hive/hive-diary-detail.dart';
 import 'package:my_app/models/hive/hive-diary.dart';
 import 'package:my_app/models/responses/diary/response-diary.dart';
 import 'package:my_app/models/responses/response-data.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/v4.dart';
 
 import '../../models/hive/hive-tarot-card-metadata.dart';
 import '../../models/responses/cards/response-tarot-metadata.dart';
-import '../../models/enums/enum-tarot-product.dart';
-import '../../models/responses/response-core.dart';
-import '../../models/tarot-list.dart';
-import '../../providers/tarot-card-provider.dart';
 import '../../utils/logger.dart';
 
 /// 타로카드 컨트롤러
